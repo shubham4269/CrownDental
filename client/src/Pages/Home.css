@@ -1,0 +1,596 @@
+/* ============================================
+   Crown Dental – Home Page Essential Styles
+   ============================================ */
+
+/* -------------- THEME COLORS ---------------- */
+:root {
+  --soft-white: #faf6ed;
+  --ivory-white: #faf3e3;
+  --pearl-beige: #d0c5b3;
+  --greige: #b3ac9c;
+  --dusty-rose: #cfb4a1;
+  --sage-green: #b3b19a;
+  --text-primary: #3d3d3d;
+  --text-secondary: #6b6b6b;
+}
+
+/* -------------- GLOBAL LAYOUT ---------------- */
+.section-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+section {
+  padding: 90px 0;
+}
+
+/* -------------- HEADINGS ---------------- */
+.section-header h2 {
+  font-size: clamp(26px, 4vw, 32px);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.section-header p {
+  color: var(--text-secondary);
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+/* ============================================
+   MEET SENIOR DOCTORS
+============================================ */
+.core-doctors-section {
+    background: #f8f1e3;
+    padding: 80px 0;
+}
+
+.core-doctors-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.core-doctor-card {
+    display: flex;
+    gap: 22px;
+    padding: 28px;
+    background:  #f8f1e3;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transition: 0.3s ease;
+}
+
+.core-doctor-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.08);
+}
+
+/* PHOTO BOX */
+.core-doctor-photo {
+    width: 140px;
+    height: 140px;
+    border-radius: 12px;
+    background: #d4c7b6; /* exact beige placeholder */
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.core-doctor-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* TEXT */
+.core-doctor-body h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3d3d3d;
+    margin: 0 0 6px;
+}
+
+.doctor-qualification {
+    font-size: 15px;
+    color: #6b6b6b;
+    margin-bottom: 10px;
+}
+
+.core-doctor-body p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: #5a5a5a;
+    margin: 0 0 10px;
+}
+
+/* BUTTONS (matching screenshot style) */
+.doc-btn {
+    margin-top: 16px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: 1.5px solid #c4b59f;
+    background: #e9dfd0;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #5a554c;
+    transition: all 0.25s ease;
+}
+
+.doc-btn:hover {
+    background: #B7AE9A;
+    border-color: #B7AE9A;
+}
+
+/* ============================================
+   WHY CHOOSE US
+============================================ */
+.why-choose-section {
+  width: 100%;
+  background: #f6ead9; 
+  padding: 80px 0;
+}
+
+.why-choose-section .section-header h2 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #3d3d3d;
+  margin-bottom: 10px;
+}
+
+.why-choose-section .section-header p {
+  color: #6b6b6b;
+  margin-top: 0;
+}
+
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  margin-top: 40px;
+}
+
+.highlight-card {
+  background: #f7efdf; /* slightly lighter card color */
+  border-radius: 14px;
+  padding: 32px 26px;
+  text-align: center;
+  border: 1px solid #e5dccb;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+  transition: all 0.25s ease;
+}
+
+.highlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.09);
+}
+
+.highlight-card img {
+  width: 54px;
+  height: 54px;
+  margin-bottom: 18px;
+  opacity: 0.9;
+}
+
+.highlight-card h3 {
+  color: #3d3d3d;
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.highlight-card p {
+  color: #6b6b6b;
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+.service-icon {
+    font-size: 48px;
+    color: #b8b0a5; 
+    display: block;
+    margin: 0 auto 16px;
+}
+
+
+
+/* ============================================
+   SERVICES SECTION
+============================================ */
+.services-section {
+  background: #f8f1e3;
+}
+
+.services-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.service-card {
+  text-align: center;
+  padding: 28px;
+  border-radius: 14px;
+  background: var(--ivory-white);
+  border: 1px solid var(--pearl-beige);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: 0.25s;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ============================================
+   DOCTORS SECTION
+============================================ */
+.doctors-section {
+  width: 100%;
+  background:  #f6ead9; 
+  padding: 80px 0;
+}
+
+.doctors-section .section-inner {
+  width: 90%;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  margin-top: 40px;
+}
+
+.doctor-card {
+  background: #fbf3e1;
+  padding: 30px 22px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: transform .3s ease, box-shadow .3s ease;
+  min-height: 330px; /* FIXES UNEVEN HEIGHT */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.doctor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* IMAGE BOX (PLACEHOLDER OR REAL IMAGE) */
+.doctor-image-placeholder,
+.doctor-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 14px;
+  background: #ede2cf;
+  margin: 0 auto 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 42px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* When real image is added */
+.doctor-photo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+/* HEADINGS */
+.doctor-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.doctor-qualification {
+  font-size: 14px;
+  color: #6d6d6d;
+  margin-bottom: 10px;
+}
+
+.doctor-specialization {
+  font-size: 15px;
+  color: #b08b65; /* golden brown like reference */
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+/* EXPERIENCE BADGE */
+.doctor-experience {
+  display: inline-block;
+  background: var(--sage-green);
+  color: white;
+  font-size: 14px;
+  padding: 7px 18px;
+  border-radius: 30px;
+  margin-top: auto;
+  font-weight: 600;
+}
+
+
+/* ============================================
+   TESTIMONIALS
+============================================ */
+/* ---------------------- TESTIMONIALS ---------------------- */
+.testimonials-section {
+  width: 100%;
+  background: #f8f1e3;
+  padding: 80px 0;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.testimonial-card {
+  background:  #fbf3e1;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.1);
+}
+
+.quote-icon {
+  font-size: 32px;
+  color: #d8c5a5;
+  margin-bottom: 14px;
+}
+
+.testimonial-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #4b4b4b;
+  margin-bottom: 18px;
+}
+
+.author {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.author-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #e5d8c4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
+
+.author-name {
+  font-weight: 600;
+  margin: 0;
+  color: #3e3e3e;
+}
+
+.author-rating {
+  font-size: 14px;
+  color: #d4a853;
+}
+
+
+/* ============================
+   OUR MODERN FACILITY SECTION
+============================ */
+.facility-section {
+  background: #f6ead9;
+  padding: 80px 0;
+}
+
+.facility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.facility-card {
+  background: #fdf6e9;
+  border-radius: 16px;
+  padding: 40px 20px 30px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.facility-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.facility-icon {
+  font-size: 48px;
+  margin-bottom: 18px;
+}
+
+.facility-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #3d3d3d;
+  margin-top: 10px;
+}
+
+
+/* ============================================
+   TECHNOLOGY
+============================================ */
+  
+.technology-section {
+  background: #f8f1e3;
+  padding: 80px 0;
+  width: 100%;
+}
+
+
+.tech-header {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 50px;
+}
+
+.tech-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.tech-header p {
+  font-size: 16px;
+  color: #6e6e6e;
+}
+
+
+.technology-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.tech-card {
+  background: #ddc9ac;
+  border-radius: 16px;
+  padding: 36px 26px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: 0.3s ease;
+}
+
+.tech-card:hover {
+  transform: translateY(-6px);
+}
+
+
+.tech-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.tech-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.tech-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #504d4d;
+}
+
+
+/* ============================================
+   BUTTONS
+============================================ */
+.btn-secondary {
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 8px;
+  color: var(--greige);
+  border: 2px solid var(--greige);
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.btn-secondary:hover {
+  background: var(--greige);
+  color: white;
+}
+
+/* ============================================
+   REVEAL ANIMATION
+============================================ */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: all 0.8s cubic-bezier(.16,1,.3,1);
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media(max-width: 768px) {
+  .section-inner {
+    padding: 0 20px;
+  }
+  section {
+    padding: 60px 0;
+  }
+  .core-doctors-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .core-doctor-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .core-doctor-photo {
+    width: 120px;
+    height: 120px;
+  }
+  .highlights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .doctors-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .technology-grid {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+  }
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width: 480px) {
+  .highlights-grid {
+    grid-template-columns: 1fr;
+  }
+  .doctors-grid {
+    grid-template-columns: 1fr;
+  }
+  .technology-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

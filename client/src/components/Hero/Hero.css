@@ -1,0 +1,292 @@
+:root {
+  /* Brand Primary Colors */
+  --soft-white: #faf6ed;
+  --ivory-white: #faf3e3;
+  
+  /* Brand Secondary Colors */
+  --pearl-beige: #d0c5b3;
+  --greige: #b3ac9c;
+  
+  /* Brand Support Colors */
+  --brushed-nickel: #b8b0a5;
+  --sage-green: #b3b19a;
+  
+  /* Brand Emotional Accents */
+  --dusty-rose: #cfb4a1;
+  --gray-orange: #cba668;
+  
+  /* Text Colors */
+  --text-primary: #3d3d3d;
+  --text-secondary: #6b6b6b;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--soft-white);
+  font-family: "Inter", "Lato", "Nunito Sans", "Work Sans", sans-serif;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* Layout Base */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: auto;
+  padding: 0 28px;
+}
+
+/* HEADER */
+.site-header {
+  position: fixed;
+  width: 100%;
+  padding: 18px 0;
+  z-index: 1000;
+  background: transparent;
+  transition: 0.3s ease;
+}
+
+.site-header.scrolled {
+  background: rgba(248, 237, 211, 0.85);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-img {
+  height: 48px;
+  transition: 0.3s ease;
+}
+
+.site-header.scrolled .logo-img {
+  height: 40px;
+}
+
+.header-nav {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  background: rgba(250, 246, 237, 0.25);
+  padding: 10px 22px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+
+.nav-link {
+  color: var(--text-primary);
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 15px;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--sage-green);
+}
+
+.nav-link::after {
+  content: "";
+  height: 2px;
+  width: 0%;
+  background: var(--sage-green);
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  transition: 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* HERO */
+.hero {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-inner {
+  padding-top: 0px;
+}
+
+.hero-logo-img {
+  height: 100px;
+  display: block;
+   margin-left: 0;       
+  margin-bottom: 20px;
+  margin-top: -30px;
+}
+
+.hero-title {
+  font-size: clamp(32px, 5vw, 46px);
+  font-weight: 600;
+  max-width: 700px;
+  margin-top: 24px;
+}
+
+.hero-subtitle {
+  max-width: 600px;
+  font-size: 17px;
+  color: var(--text-secondary);
+  margin: 20px 0 30px 0;
+}
+
+/* Buttons */
+.hero-cta-group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  padding: 14px 28px;
+  background: var(--sage-green);
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(179, 177, 154, 0.3);
+}
+
+.btn-secondary {
+  padding: 14px 28px;
+  border-radius: 8px;
+  color: var(--greige);
+  border: 1.5px solid var(--greige);
+  background: transparent;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  border-color: var(--sage-green);
+  color: var(--sage-green);
+  box-shadow: 0 4px 14px rgba(179, 177, 154, 0.15);
+}
+
+/* Badges */
+.hero-trust-badges {
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.logo-img {
+  opacity: 0;
+  transition: opacity 0.3s ease, height 0.3s ease;
+}
+
+/* Show logo after scroll */
+.site-header.scrolled .logo-img {
+  opacity: 1;
+}
+
+.hero-logo-img {
+  opacity: 1 !important; /* always visible */
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
+}
+
+/* Mobile menu icon (hamburger) */
+.mobile-menu-icon {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-icon {
+    display: block;
+  }
+}
+
+/* Mobile Nav container */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  background: rgba(250, 246, 237, 0.95);
+  padding: 15px 22px;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+/* When menu is open */
+.mobile-nav.open {
+  display: flex;
+}
+
+/* Mobile nav links */
+.mobile-nav-link {
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.mobile-nav-link:hover {
+  color: var(--sage-green);
+
+}
+
+/* Prevent animation ONLY on the nav, not hero */
+.site-header,
+.site-header .header-container,
+.site-header .logo-img,
+.site-header .desktop-nav,
+.site-header .mobile-menu-icon,
+.site-header .mobile-nav {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+/* Hide navbar logo ONLY on homepage UNTIL scroll */
+.home-header .logo-img {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* When scrolled, show it again */
+.site-header.scrolled .logo-img {
+  opacity: 1 !important;
+}
+
