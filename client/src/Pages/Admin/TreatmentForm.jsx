@@ -10,15 +10,31 @@ function blankFaq() {
 export default function TreatmentForm() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  const categoryOptions = [
+    "Preventive",
+    "Restorative",
+    "Endodontics",
+    "Implants",
+    "Prosthetics",
+    "Cosmetic",
+    "Orthodontics",
+    "Pediatric",
+    "Periodontics",
+    "Oral Surgery",
+  ];
 
   const [form, setForm] = useState({
     title: "",
     slug: "",
+    category: "",
     metaTitle: "",
     metaDescription: "",
     seoCopy: "",
+    benefits: [""],
     regularPrice: "",
     memberPrice: "",
     heroImage: "",
@@ -26,18 +42,33 @@ export default function TreatmentForm() {
     faqs: [blankFaq()],
   });
 
-  // FETCH EXISTING DATA
+  // LOAD EXISTING TREATMENT
   useEffect(() => {
     if (!id) return;
     API.get(`/treatments/id/${id}`).then((res) => {
-      setForm({ ...form, ...res.data });
+      setForm((prev) => ({ ...prev, ...res.data }));
     });
-    // eslint-disable-next-line
   }, [id]);
 
   const update = (key, value) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
+  // ----- BENEFITS HANDLERS -----
+  const updateBenefit = (index, value) => {
+    let b = [...form.benefits];
+    b[index] = value;
+    update("benefits", b);
+  };
+
+  const addBenefit = () => update("benefits", [...form.benefits, ""]);
+
+  const removeBenefit = (index) =>
+    update(
+      "benefits",
+      form.benefits.filter((_, i) => i !== index)
+    );
+
+  // ----- FAQ HANDLERS -----
   const updateFaqAt = (i, value) =>
     setForm((prev) => ({
       ...prev,
@@ -50,15 +81,7 @@ export default function TreatmentForm() {
       faqs: prev.faqs.filter((_, idx) => idx !== i),
     }));
 
-  // ⭐ REMOVE a gallery image
-  const removeGalleryImage = (index) => {
-    setForm((prev) => ({
-      ...prev,
-      gallery: prev.gallery.filter((_, i) => i !== index),
-    }));
-  };
-
-  // ⭐ UPDATED uploadImage() — supports multiple uploads
+  // ----- IMAGE UPLOAD -----
   const uploadImage = async (e, target = "heroImage") => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
@@ -73,44 +96,47 @@ export default function TreatmentForm() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      // Single hero upload
       if (target === "heroImage" && res.data.url) {
         update("heroImage", res.data.url);
       }
 
-      // Multiple gallery uploads
-      if (target === "gallery" && res.data.urls) {
-        update("gallery", [...form.gallery, ...res.data.urls]);
+      if (target === "gallery") {
+        const urls = res.data.urls || [res.data.url];
+        update("gallery", [...form.gallery, ...urls]);
       }
-
-      // If backend returns only 1 image but target = gallery
-      if (target === "gallery" && res.data.url) {
-        update("gallery", [...form.gallery, res.data.url]);
-      }
-
     } catch (err) {
       alert("Upload failed");
-      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
+  const removeGalleryImage = (index) =>
+    update(
+      "gallery",
+      form.gallery.filter((_, i) => i !== index)
+    );
+
+  // ----- SAVE TREATMENT -----
   const submit = async () => {
     try {
       setLoading(true);
       setErrorMsg("");
 
-      let payload = { ...form };
-      payload.slug =
-        form.slug.trim() ||
-        slugify(form.title || "", { lower: true, strict: true });
-
-      // Client-side validation
-      if (!form.title || !form.title.trim()) {
-        setErrorMsg("Title is required.");
+      if (!form.title.trim()) {
+        setErrorMsg("Title is required");
         return;
       }
+      if (!form.category.trim()) {
+        setErrorMsg("Category is required");
+        return;
+      }
+
+      let payload = { ...form };
+
+      payload.slug =
+        form.slug.trim() ||
+        slugify(form.title, { lower: true, strict: true });
 
       if (id) {
         await API.put(`/treatments/${id}`, payload);
@@ -122,9 +148,7 @@ export default function TreatmentForm() {
 
       navigate("/dashboard/treatments");
     } catch (err) {
-      const serverMsg = err?.response?.data?.error || err.message;
-      setErrorMsg(serverMsg);
-      console.error("Save treatment error:", err);
+      setErrorMsg(err?.response?.data?.error || err.message);
     } finally {
       setLoading(false);
     }
@@ -139,14 +163,16 @@ export default function TreatmentForm() {
       {errorMsg && (
         <div
           style={{
-            display: "grid",
-            gap: 20,
-            background: "#faf7f2",
-            padding: 24,
-            borderRadius: 16,
-            boxShadow: "0 6px 20px rgba(0,0,0,0.06)",
+            background: "#ffe8e8",
+            padding: 14,
+            borderRadius: 8,
+            color: "crimson",
+            fontWeight: 600,
+            marginBottom: 10,
           }}
-        ></div>
+        >
+          {errorMsg}
+        </div>
       )}
 
       <div
@@ -160,139 +186,123 @@ export default function TreatmentForm() {
         }}
       >
         {/* TITLE */}
+        <Field
+          label="Treatment Title"
+          required
+          value={form.title}
+          placeholder="Dental Implants"
+          onChange={(v) => update("title", v)}
+        />
+
+        {/* CATEGORY */}
         <div>
           <label style={{ fontWeight: 600 }}>
-            Treatment Title (H1) <span style={{ color: "crimson" }}>*</span>
+            Category <span style={{ color: "crimson" }}>*</span>
           </label>
-          <input
-            value={form.title}
-            onChange={(e) => update("title", e.target.value)}
-            placeholder="Dental Implants"
+          <select
+            value={form.category}
+            onChange={(e) => update("category", e.target.value)}
             style={{
               width: "100%",
               padding: 12,
               borderRadius: 8,
-              border:
-                !form.title?.trim() && errorMsg
-                  ? "1px solid crimson"
-                  : "1px solid #ccc",
             }}
-          />
+          >
+            <option value="">Select Category</option>
+            {categoryOptions.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* BENEFITS */}
+        <div>
+          <label style={{ fontWeight: 600 }}>Key Benefits</label>
+
+          {form.benefits.map((b, i) => (
+            <div key={i} style={{ display: "flex", gap: 10, marginBottom: 8 }}>
+              <input
+                value={b}
+                onChange={(e) => updateBenefit(i, e.target.value)}
+                placeholder="Example: Natural-looking replacement"
+                style={{ flex: 1, padding: 10, borderRadius: 8 }}
+              />
+              <button
+                onClick={() => removeBenefit(i)}
+                style={{
+                  background: "crimson",
+                  color: "white",
+                  borderRadius: 6,
+                  padding: "0 10px",
+                }}
+              >
+                X
+              </button>
+            </div>
+          ))}
+
+          <button
+            onClick={addBenefit}
+            style={{ padding: "8px 14px", background: "#0a7b70", color: "white", borderRadius: 8 }}
+          >
+            + Add Benefit
+          </button>
         </div>
 
         {/* META TITLE */}
-        <div>
-          <label style={{ fontWeight: 600 }}>Meta Title</label>
-          <input
-            value={form.metaTitle}
-            onChange={(e) => update("metaTitle", e.target.value)}
-            placeholder="Dental Implants in Prayagraj — Crown Dental"
-            style={{
-              width: "100%",
-              padding: 12,
-              borderRadius: 8,
-            }}
-          />
-        </div>
+        <Field
+          label="Meta Title"
+          value={form.metaTitle}
+          onChange={(v) => update("metaTitle", v)}
+        />
 
         {/* META DESCRIPTION */}
-        <div>
-          <label style={{ fontWeight: 600 }}>Meta Description</label>
-          <textarea
-            rows="3"
-            value={form.metaDescription}
-            onChange={(e) => update("metaDescription", e.target.value)}
-            placeholder="Permanent tooth replacement with world-class implants..."
-            style={{
-              width: "100%",
-              padding: 12,
-              borderRadius: 8,
-            }}
-          />
-        </div>
+        <TextArea
+          label="Meta Description"
+          value={form.metaDescription}
+          onChange={(v) => update("metaDescription", v)}
+        />
 
         {/* SEO COPY */}
-        <div>
-          <label style={{ fontWeight: 600 }}>SEO Treatment Description</label>
-          <textarea
-            rows="6"
-            value={form.seoCopy}
-            onChange={(e) => update("seoCopy", e.target.value)}
-            placeholder="Full detailed treatment information..."
-            style={{
-              width: "100%",
-              padding: 12,
-              borderRadius: 8,
-            }}
-          />
-        </div>
+        <TextArea
+          label="SEO Copy / Treatment Description"
+          rows={6}
+          value={form.seoCopy}
+          onChange={(v) => update("seoCopy", v)}
+        />
 
         {/* PRICING */}
-        <div>
-          <label style={{ fontWeight: 600 }}>Regular Price</label>
-          <input
-            value={form.regularPrice}
-            onChange={(e) => update("regularPrice", e.target.value)}
-            placeholder="₹35,000"
-            style={{
-              width: "100%",
-              padding: 12,
-              borderRadius: 8,
-            }}
-          />
-        </div>
+        <Field
+          label="Regular Price"
+          value={form.regularPrice}
+          onChange={(v) => update("regularPrice", v)}
+        />
 
-        <div>
-          <label style={{ fontWeight: 600 }}>Membership Price</label>
-          <input
-            value={form.memberPrice}
-            onChange={(e) => update("memberPrice", e.target.value)}
-            placeholder="₹29,999"
-            style={{
-              width: "100%",
-              padding: 12,
-              borderRadius: 8,
-            }}
-          />
-        </div>
+        <Field
+          label="Membership Price"
+          value={form.memberPrice}
+          onChange={(v) => update("memberPrice", v)}
+        />
 
         {/* HERO IMAGE */}
         <div>
           <label style={{ fontWeight: 600 }}>Hero Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => uploadImage(e, "heroImage")}
-          />
+          <input type="file" accept="image/*" onChange={(e) => uploadImage(e, "heroImage")} />
+
           {form.heroImage && (
-            <img
-              src={form.heroImage}
-              alt=""
-              style={{ height: 80, borderRadius: 10, marginTop: 10 }}
-            />
+            <img src={form.heroImage} alt="" style={{ height: 80, marginTop: 10, borderRadius: 8 }} />
           )}
         </div>
 
-        {/* GALLERY */}
+        {/* GALLERY IMAGES */}
         <div>
           <label style={{ fontWeight: 600 }}>Gallery (Before/After)</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) => uploadImage(e, "gallery")}
-          />
+          <input type="file" accept="image/*" multiple onChange={(e) => uploadImage(e, "gallery")} />
 
           <div style={{ display: "flex", gap: 10, marginTop: 10, flexWrap: "wrap" }}>
             {form.gallery.map((g, i) => (
               <div key={i} style={{ position: "relative" }}>
-                <img
-                  src={g}
-                  alt="case"
-                  style={{ height: 60, borderRadius: 6 }}
-                />
-
-                {/* Delete button */}
+                <img src={g} alt="" style={{ height: 60, borderRadius: 6 }} />
                 <button
                   onClick={() => removeGalleryImage(i)}
                   style={{
@@ -302,14 +312,8 @@ export default function TreatmentForm() {
                     background: "crimson",
                     color: "white",
                     borderRadius: "50%",
-                    border: "none",
                     width: 22,
                     height: 22,
-                    cursor: "pointer",
-                    fontSize: 12,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
                   }}
                 >
                   ×
@@ -319,94 +323,61 @@ export default function TreatmentForm() {
           </div>
         </div>
 
-        {/* FAQS */}
+        {/* FAQs */}
         <div>
           <label style={{ fontWeight: 600 }}>FAQs</label>
           {form.faqs.map((f, i) => (
-            <div
-              key={i}
-              style={{
-                background: "white",
-                padding: 12,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}
-            >
-              <input
+            <div key={i} style={{ padding: 10, background: "white", borderRadius: 10 }}>
+              <Field
                 value={f.q}
                 placeholder="Question"
-                onChange={(e) =>
-                  updateFaqAt(i, { ...f, q: e.target.value })
-                }
-                style={{
-                  width: "100%",
-                  padding: 10,
-                  borderRadius: 8,
-                  marginBottom: 6,
-                }}
+                onChange={(v) => updateFaqAt(i, { ...f, q: v })}
               />
-              <textarea
-                rows="2"
+              <TextArea
                 value={f.a}
                 placeholder="Answer"
-                onChange={(e) =>
-                  updateFaqAt(i, { ...f, a: e.target.value })
-                }
-                style={{
-                  width: "100%",
-                  padding: 10,
-                  borderRadius: 8,
-                }}
+                onChange={(v) => updateFaqAt(i, { ...f, a: v })}
               />
+
               <button
                 onClick={() => removeFaqAt(i)}
                 style={{
-                  marginTop: 6,
                   background: "crimson",
                   color: "white",
                   padding: "6px 12px",
-                  borderRadius: 6,
+                  borderRadius: 8,
                 }}
               >
                 Remove FAQ
               </button>
             </div>
           ))}
+
           <button
-            onClick={() =>
-              setForm((prev) => ({
-                ...prev,
-                faqs: [...prev.faqs, blankFaq()],
-              }))
-            }
+            onClick={() => update("faqs", [...form.faqs, blankFaq()])}
             style={{
               padding: "10px 14px",
               background: "#0a7b70",
               color: "white",
               borderRadius: 8,
-              marginTop: 6,
+              marginTop: 8,
             }}
           >
             + Add FAQ
           </button>
         </div>
 
-        {/* SUBMIT BUTTONS */}
+        {/* SUBMIT BUTTON */}
         <div style={{ display: "flex", gap: 12 }}>
           <button
             onClick={submit}
-            disabled={loading || !form.title?.trim()}
+            disabled={loading}
             style={{
               padding: "12px 20px",
-              background:
-                loading || !form.title?.trim() ? "#9dbab7" : "#0a7b70",
+              background: loading ? "#aaa" : "#0a7b70",
               color: "white",
               borderRadius: 10,
               fontSize: 16,
-              cursor:
-                loading || !form.title?.trim()
-                  ? "not-allowed"
-                  : "pointer",
             }}
           >
             {loading ? "Saving..." : id ? "Update Treatment" : "Create Treatment"}
@@ -414,11 +385,7 @@ export default function TreatmentForm() {
 
           <button
             onClick={() => navigate("/dashboard/treatments")}
-            style={{
-              padding: "12px 20px",
-              background: "#ddd",
-              borderRadius: 10,
-            }}
+            style={{ padding: "12px 20px", background: "#ddd", borderRadius: 10 }}
           >
             Cancel
           </button>
@@ -427,3 +394,37 @@ export default function TreatmentForm() {
     </div>
   );
 }
+
+/* ---------- Small UI Helper Components ---------- */
+
+function Field({ label, value, placeholder, onChange, required }) {
+  return (
+    <div>
+      <label style={{ fontWeight: 600 }}>
+        {label} {required && <span style={{ color: "crimson" }}>*</span>}
+      </label>
+      <input
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        style={{ width: "100%", padding: 12, borderRadius: 8 }}
+      />
+    </div>
+  );
+}
+
+function TextArea({ label, value, placeholder, onChange, rows = 3 }) {
+  return (
+    <div>
+      <label style={{ fontWeight: 600 }}>{label}</label>
+      <textarea
+        rows={rows}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        style={{ width: "100%", padding: 12, borderRadius: 8 }}
+      />
+    </div>
+  );
+}
+

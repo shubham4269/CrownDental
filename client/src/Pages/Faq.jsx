@@ -139,7 +139,11 @@ export default function FAQ() {
                 }}
               >
                 {faq.q}
-                <span style={{ fontSize: "1.5rem" }}>{open === index ? "−" : "+"}</span>
+                <span
+                  className={`faq-toggle ${open === index ? "open" : ""}`}
+                  aria-hidden
+                  style={{ color: "#6f6048" }}
+                />
               </div>
 
               {/* ANSWER */}
@@ -205,6 +209,31 @@ export default function FAQ() {
             opacity: 1;
             transform: translateY(0);
           }
+
+          /* Animated +/- toggle icon */
+          .faq-toggle {
+            position: relative;
+            width: 18px;
+            height: 18px;
+            margin-left: 14px;
+            flex-shrink: 0;
+          }
+          .faq-toggle::before,
+          .faq-toggle::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transform-origin: center;
+            transition: transform .25s ease;
+          }
+          .faq-toggle::before { transform: translate(-50%, -50%) rotate(0deg); }
+          .faq-toggle::after { transform: translate(-50%, -50%) rotate(90deg); }
+          .faq-toggle.open::after { transform: translate(-50%, -50%) rotate(0deg); }
         `}
       </style>
     </div>

@@ -4,6 +4,7 @@ import API from "../../services/api";
 
 import { FiChevronDown, FiCheck } from "react-icons/fi";
 
+/* ---------------- CATEGORY OPTIONS ---------------- */
 const categoryOptions = [
   "All",
   "Preventive",
@@ -16,9 +17,9 @@ const categoryOptions = [
   "Pediatric",
   "Periodontics",
   "Oral Surgery",
-  "Memberships",
 ];
 
+/* ---------------- CONCERNS OPTIONS ---------------- */
 const concernOptions = [
   "Pain",
   "Cavities",
@@ -29,9 +30,7 @@ const concernOptions = [
   "Kids Care",
 ];
 
-const durationOptions = ["Single Visit", "2–3 Visits", "Multi-Step Treatments"];
-
-// ------------------ DROPDOWN REUSABLE ------------------
+/* ---------------- DROPDOWN COMPONENT ---------------- */
 function Dropdown({ label, selected, setSelected, options, multiple = false }) {
   const [open, setOpen] = useState(false);
   const ref = useRef();
@@ -66,7 +65,6 @@ function Dropdown({ label, selected, setSelected, options, multiple = false }) {
             ? `${selected.length} selected`
             : label
           : selected || label}
-
         <FiChevronDown />
       </div>
 
@@ -79,7 +77,7 @@ function Dropdown({ label, selected, setSelected, options, multiple = false }) {
             background: "white",
             borderRadius: 12,
             padding: 10,
-            boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.15)",
             zIndex: 50,
           }}
         >
@@ -110,14 +108,11 @@ function Dropdown({ label, selected, setSelected, options, multiple = false }) {
                   background: isActive ? "var(--sage-green)" : "transparent",
                   color: isActive ? "white" : "var(--text-primary)",
                   display: "flex",
-                  alignItems: "center",
                   gap: 10,
                 }}
               >
                 {multiple && (
-                  <FiCheck
-                    style={{ opacity: selected.includes(opt) ? 1 : 0.2 }}
-                  />
+                  <FiCheck style={{ opacity: isActive ? 1 : 0.2 }} />
                 )}
                 {opt}
               </div>
@@ -129,7 +124,7 @@ function Dropdown({ label, selected, setSelected, options, multiple = false }) {
   );
 }
 
-// ------------------------ MAIN COMPONENT ------------------------
+/* ------------------------ MAIN PAGE ------------------------ */
 export default function TreatmentsHub() {
   const [treatments, setTreatments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -137,16 +132,14 @@ export default function TreatmentsHub() {
 
   const [category, setCategory] = useState("All");
   const [concerns, setConcerns] = useState([]);
-  const [duration, setDuration] = useState("");
 
-  // Fetch treatments
+  /* ---------------- FETCH ALL TREATMENTS ---------------- */
   useEffect(() => {
     API.get("/treatments")
       .then((res) => setTreatments(res.data || []))
       .catch((err) => {
         console.error(err);
-        const msg = err?.response?.data?.error || err.message;
-        setError(msg);
+        setError(err?.response?.data?.error || err.message);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -154,29 +147,27 @@ export default function TreatmentsHub() {
   const clearFilters = () => {
     setCategory("All");
     setConcerns([]);
-    setDuration("");
   };
 
-  // Apply filters
-  const filtered = useMemo(
-    () =>
-      treatments.filter((t) => {
-        if (!t) return false;
+  /* ---------------- FILTERING LOGIC ---------------- */
+  const filtered = useMemo(() => {
+    return treatments.filter((t) => {
+      if (!t) return false;
 
-        if (category !== "All" && t.category !== category) return false;
+      // Filter by category
+      if (category !== "All" && t.category !== category) return false;
 
-        if (concerns.length > 0) {
-          const combined = `${t.short} ${t.seoCopy}`.toLowerCase();
-          if (!concerns.some((c) => combined.includes(c.toLowerCase())))
-            return false;
+      // Filter by concerns (searching inside seoCopy)
+      if (concerns.length > 0) {
+        const text = `${t.seoCopy}`.toLowerCase();
+        if (!concerns.some((c) => text.includes(c.toLowerCase()))) {
+          return false;
         }
+      }
 
-        if (duration && !(t.duration || "").includes(duration)) return false;
-
-        return true;
-      }),
-    [treatments, category, concerns, duration]
-  );
+      return true;
+    });
+  }, [treatments, category, concerns]);
 
   if (loading) return <div style={{ padding: 40 }}>Loading treatments...</div>;
 
@@ -189,13 +180,12 @@ export default function TreatmentsHub() {
     );
   }
 
-  // ------------------ UI ------------------
+  /* ---------------- UI ---------------- */
   return (
     <div style={{ background: "var(--soft-white)", minHeight: "100vh" }}>
-      {/* SPACER BELOW FIXED NAVBAR (height ≈ header height) */}
       <div style={{ height: "96px" }} />
 
-      {/* ---------------- HERO WITH BACKGROUND IMAGE ---------------- */}
+      {/* ---------------- HERO ---------------- */}
       <section
         style={{
           padding: "80px 8% 100px",
@@ -203,11 +193,9 @@ export default function TreatmentsHub() {
           backgroundImage: 'url("/Images/treatment.jpg")',
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
           color: "white",
+          
           position: "relative",
-          borderRadius: "60px 60px 60px 60px",
-          overflow: "hidden",
         }}
       >
         <div
@@ -215,24 +203,14 @@ export default function TreatmentsHub() {
             position: "absolute",
             inset: 0,
             background: "rgba(0,0,0,0.45)",
-            zIndex: 1,
           }}
         />
-
         <div style={{ position: "relative", zIndex: 3 }}>
           <h1 style={{ fontSize: 46, fontWeight: 700 }}>
-            Specialist-Led Dental Care — Advanced, Gentle, Trusted
+            Explore Specialist Dental Treatments
           </h1>
-          <p
-            style={{
-              maxWidth: 820,
-              margin: "20px auto 0",
-              fontSize: 18,
-              lineHeight: 1.6,
-            }}
-          >
-            Explore preventive, restorative, cosmetic and surgical treatments
-            delivered by specialists using modern dental technology.
+          <p style={{ maxWidth: 820, margin: "20px auto 0", fontSize: 18 }}>
+            Find the right treatment for your dental needs — from preventive to surgical.
           </p>
         </div>
       </section>
@@ -253,6 +231,7 @@ export default function TreatmentsHub() {
             setSelected={setCategory}
             options={categoryOptions}
           />
+
           <Dropdown
             label="Concerns"
             selected={concerns}
@@ -260,22 +239,16 @@ export default function TreatmentsHub() {
             options={concernOptions}
             multiple
           />
-          <Dropdown
-            label="Duration"
-            selected={duration}
-            setSelected={setDuration}
-            options={durationOptions}
-          />
 
           <button
             onClick={clearFilters}
             style={{
               padding: "12px 20px",
               borderRadius: 12,
-              border: "1px solid rgba(0,0,0,0.15)",
               background: "white",
-              fontWeight: 600,
+              border: "1px solid rgba(0,0,0,0.2)",
               cursor: "pointer",
+              fontWeight: 600,
             }}
           >
             Clear Filters
@@ -303,12 +276,10 @@ export default function TreatmentsHub() {
               style={{
                 textDecoration: "none",
                 color: "inherit",
-                backdropFilter: "blur(14px)",
                 background: "rgba(255,255,255,0.25)",
+                backdropFilter: "blur(12px)",
                 borderRadius: 18,
-                padding: 0,
                 border: "1px solid rgba(255,255,255,0.35)",
-                boxShadow: "0 8px 35px rgba(0,0,0,0.12)",
                 overflow: "hidden",
                 transition: "0.3s",
               }}
@@ -321,32 +292,26 @@ export default function TreatmentsHub() {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    transition: "0.3s",
                   }}
                 />
               </div>
 
               <div style={{ padding: 20 }}>
-                <h3 style={{ fontSize: 25, marginBottom: 9 }}>{t.title}</h3>
-                <p
-                  style={{
-                    fontSize: 17,
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.5,
-                  }}
-                >
-                  {(t.seoCopy || "").slice(0, 300)}...
+                <h3 style={{ fontSize: 24, fontWeight: 600 }}>{t.title}</h3>
+
+                <p style={{ fontSize: 16, color: "#555", marginTop: 6 }}>
+                  {(t.seoCopy || "").slice(0, 200)}...
                 </p>
 
-                <div
+                <p
                   style={{
-                    marginTop: 14,
-                    color: "var(--sage-green)",
+                    marginTop: 10,
                     fontWeight: 700,
+                    color: "var(--sage-green)",
                   }}
                 >
                   Explore →
-                </div>
+                </p>
               </div>
             </Link>
           ))}
@@ -355,4 +320,5 @@ export default function TreatmentsHub() {
     </div>
   );
 }
+
 

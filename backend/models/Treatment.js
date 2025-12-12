@@ -4,6 +4,8 @@ const TreatmentSchema = new mongoose.Schema({
   title: { type: String, required: true },
   slug: { type: String, unique: true },
 
+   category: { type: String, required: true },
+
   metaTitle: String,
   metaDescription: String,
 

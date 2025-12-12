@@ -196,6 +196,9 @@ body {
   gap: 16px;
   flex-wrap: wrap;
 }
+.hero-trust-badges .badge {
+  font-weight: 800;  
+}
 
 .badge {
   font-size: 15px;
@@ -289,4 +292,5 @@ body {
 .site-header.scrolled .logo-img {
   opacity: 1 !important;
 }
+
 
