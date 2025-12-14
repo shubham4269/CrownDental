@@ -84,7 +84,7 @@ export default function SingleTreatment() {
   const fadeDelay = (i) => ({ animationDelay: `${i * 80}ms` });
 
   return (
-    <div className="container" style={{ paddingTop: 120, paddingBottom: 80 }}>
+    <div className="container t-treatment-container">
       {/* Inline CSS for premium look + animations */}
       <style>{`
         :root{
@@ -98,21 +98,17 @@ export default function SingleTreatment() {
           --subtext:#6b6b6b;
         }
 
-        .t-hero {
-          padding: 0;
-        }
+        .t-hero { padding: 0; }
 
         .hero-title {
           font-size: 56px;
           font-weight: 800;
           letter-spacing: -1px;
           color: var(--text);
-          margin: 0 0 18px 0;
-          line-height: 1;
+          margin: 8px 0 20px 0; /* top + bottom space */
+          line-height: 1.1;
           transform: translateY(0);
           animation: liftIn .6s ease both;
-           white-space: nowrap;
-          
         }
 
         @keyframes liftIn {
@@ -128,6 +124,8 @@ export default function SingleTreatment() {
           transform-origin: center;
           animation: imageFloat 8s ease-in-out infinite;
         }
+
+        .hero-image img { width:100%; height:auto; max-height:420px; display:block; object-fit:cover }
 
         @keyframes imageFloat {
           0% { transform: translateY(0px) scale(1); }
@@ -158,8 +156,8 @@ export default function SingleTreatment() {
         }
 
         .section-card {
-          margin: 30px 8px;
-          padding: 26px;
+          margin: 22px 8px;
+          padding: 22px;
           border-radius: var(--radius);
           background: var(--card);
           box-shadow: var(--shadow);
@@ -183,12 +181,7 @@ export default function SingleTreatment() {
           color: var(--subtext);
         }
 
-        .benefits-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 14px;
-          margin-top: 8px;
-        }
+        .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 6px }
 
         .benefit-pill {
           background: linear-gradient(180deg, rgba(235,230,220,0.6), rgba(255,255,255,0.6));
@@ -271,47 +264,16 @@ export default function SingleTreatment() {
 }
 
 
-        .pricing-row {
-          display:flex;
-          gap:20px;
-          align-items:center;
-          flex-wrap:wrap;
-        }
+        .pricing-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap }
 
-        .price-bubble {
-          background: linear-gradient(180deg,#fff,#fbf7ef);
-          padding:12px 16px;
-          border-radius: 12px;
-          font-weight:700;
-          box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-          border:1px solid rgba(0,0,0,0.03);
-        }
+        .price-bubble { background: linear-gradient(180deg,#fff,#fbf7ef); padding:10px 14px; border-radius: 10px; font-weight:700; box-shadow: 0 6px 16px rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.03) }
 
-        .gallery-grid {
-          display:grid;
-          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-          gap:14px;
-        }
+        .gallery-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px }
 
-        .gallery-item {
-          border-radius:12px;
-          overflow:hidden;
-          height:160px;
-          object-fit:cover;
-          box-shadow: 0 8px 26px rgba(0,0,0,0.06);
-          transition: transform .28s ease;
-        }
+        .gallery-item { border-radius:12px; overflow:hidden; height:150px; object-fit:cover; box-shadow: 0 8px 22px rgba(0,0,0,0.06); transition: transform .28s ease }
         .gallery-item:hover { transform: translateY(-6px) scale(1.02); }
 
-        details summary {
-          list-style:none;
-          cursor:pointer;
-          font-weight:700;
-          padding:12px 0;
-          display:flex;
-          align-items:center;
-          justify-content:space-between;
-        }
+        details summary { list-style:none; cursor:pointer; font-weight:700; padding:10px 0; display:flex; align-items:center; justify-content:space-between }
         details[open] summary { color: var(--primary); }
 
         /* Animated +/- icon for FAQ */
@@ -350,25 +312,48 @@ export default function SingleTreatment() {
         }
 
         /* Responsive tweaks */
+        .t-treatment-container { padding-top: 64px; padding-bottom: 64px }
+        .hero-cta-group { margin-top: 12px; display:flex; gap:10px; flex-wrap:wrap }
+        .hero-cta-group .btn-primary, .hero-cta-group .btn-secondary { display:inline-flex; align-items:center; height:44px }
+        .cta-row { margin-top:24px; display:flex; gap:10px; flex-wrap:wrap; align-items:center }
+        .cta-row .btn-primary, .cta-row .btn-secondary { display:inline-flex; align-items:center; height:44px }
         @media (max-width: 880px) {
-          .hero-title { font-size: 36px; }
-          .section-card { margin: 22px 6%; padding:18px; }
+          /* Make hero image full-view on mobile */
+          .hero-image-card { margin: 0; padding: 0; border-radius: 0; background: transparent }
+          .hero-image { border-radius: 0; box-shadow: none; border: none }
+          .hero-image img { height: 56vh; max-height: none; object-fit: cover }
+          .hero-title { font-size: 30px; margin: 6px 0 10px 0; line-height: 1.2 }
+          .section-card { margin: 16px 4%; padding:14px; }
+            /* Prevent title overlapping with fixed/sticky navbar */
+            .t-hero { padding-top: 64px; }
+          .t-treatment-container { padding-top: 24px; padding-bottom: 28px }
+          .hero-cta-group { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap }
+          .hero-cta-group .btn-primary, .hero-cta-group .btn-secondary { width:100%; justify-content:center; height:44px }
+          .cta-row { padding-left: 0; justify-content: center; gap:8px; margin-top:18px }
+          .cta-row .btn-primary, .cta-row .btn-secondary { width:100%; justify-content:center; height:44px }
         }
-      `}</style>
+        @media (max-width: 480px){
+          .hero-image img { height: 62vh }
+          .hero-title{ font-size: 26px; margin: 6px 0 12px 0 }
+          .gallery-item{ height: 110px }
+            .t-hero { padding-top: 72px; }
+        }
+        `}</style>
 
       {/* ---------------------- HERO ---------------------- */}
       <section className="t-hero">
         <h1 className="hero-title">{treatment.title}</h1>
 
         {treatment.heroImage && (
-          <section className="section-card" style={{ marginTop: 18, background: "linear-gradient(180deg,var(--muted), #fff)" }}>
-            <div className="hero-image" style={{ overflow: "hidden" }}>
+          <section className="section-card hero-image-card" style={{ marginTop: 18, background: "linear-gradient(180deg,var(--muted), #fff)" }}>
+            <div className="hero-image">
               <img
                 src={treatment.heroImage}
                 alt="hero"
                 style={{
                   width: "100%",
-                  height: 420,
+                  height: "auto",
+                  maxHeight: 420,
                   objectFit: "cover",
                   display: "block",
                 }}
@@ -377,17 +362,19 @@ export default function SingleTreatment() {
           </section>
         )}
 
-        <div className="hero-cta-group" style={{ marginTop: 20, display: "flex", gap: 12 }}>
+        <div className="hero-cta-group">
           <button className="btn-primary" onClick={openModal}>Book Appointment</button>
-          <a href={`tel:+919910478281`} className="btn-secondary">Call Clinic</a>
-          <a href={`https://wa.me/919910478281`} className="btn-secondary">WhatsApp</a>
+          <a href="tel:+919910478281" className="btn-secondary">Call Clinic</a>
+          <a href="https://wa.me/919910478281" className="btn-secondary">WhatsApp</a>
         </div>
       </section>
 
       {/* ---------------------- ABOUT / SEO COPY ---------------------- */}
       <section className="section-card" style={{ marginTop: 28, background: "linear-gradient(180deg,var(--muted), #fff)" }}>
-        <h2 className="section-title">About This Treatment</h2>
-        <p className="muted" style={{ marginTop: 8, lineHeight: 1.75 }}>{treatment.seoCopy}</p>
+        <div>
+          <h2 className="section-title">About This Treatment</h2>
+          <p className="muted" style={{ marginTop: 8, lineHeight: 1.75 }}>{treatment.seoCopy}</p>
+        </div>
       </section>
 
       {/* ================= BENEFITS ================= */}
@@ -429,10 +416,10 @@ export default function SingleTreatment() {
       <li
         key={i}
         className="procedure-step reveal-step"
-        style={{ animationDelay: `${i * 140}ms` }}
+        style={{ animationDelay: (i * 140) + 'ms' }}
       >
         <div className="step-icon">
-          {icons[i] || <Tooth size={18} />}
+          {icons[i] || <RefreshCcw size={18} />}
         </div>
 
         <div className="step-content">
@@ -488,7 +475,7 @@ export default function SingleTreatment() {
               <img
                 key={i}
                 src={src}
-                alt={`case-${i}`}
+                alt={'case-' + i}
                 className="gallery-item"
                 style={{ width: "100%" }}
               />
@@ -517,13 +504,8 @@ export default function SingleTreatment() {
       )}
 
       {/* ---------------------- CTA ---------------------- */}
-      <div
-        style={{ marginTop: 36, display: "flex", gap: 12, paddingLeft: "8%" }}
-      >
-       <button className="btn-primary" onClick={() => setOpenLead(true)}>
-              Book a Consultation
-      </button>
-
+      <div className="cta-row">
+        <button className="btn-primary" onClick={() => setOpenLead(true)}>Book a Consultation</button>
         <a href="tel:+919910478281" className="btn-secondary">Call Clinic</a>
         <a href="https://wa.me/919910478281" className="btn-secondary">WhatsApp</a>
       </div>
@@ -577,7 +559,7 @@ export default function SingleTreatment() {
             <p style={{ marginTop: 0, color: "var(--subtext)", marginBottom: 14 }}>Quick form — we'll contact you to confirm appointment details.</p>
 
             <LeadForm
-              source={`Treatment Page - ${slug}`}
+              source={'Treatment Page - ' + slug}
               onSuccess={() => setOpenLead(false)}
             />
           </div>
