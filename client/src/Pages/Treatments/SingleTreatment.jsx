@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Stethoscope, Sparkles, RefreshCcw } from "lucide-react";
 import { useParams } from "react-router-dom";
 import API from "../../services/api";
 import staticProcedures from "../../data/staticProcedures"; 
@@ -110,6 +111,8 @@ export default function SingleTreatment() {
           line-height: 1;
           transform: translateY(0);
           animation: liftIn .6s ease both;
+           white-space: nowrap;
+          
         }
 
         @keyframes liftIn {
@@ -210,13 +213,63 @@ export default function SingleTreatment() {
           box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
 
-        .procedure-list li {
-          margin-bottom: 14px;
-          line-height:1.6;
-          color:var(--subtext);
-        }
+       /* =======================
+   PROCEDURE ICON STEPS
+======================= */
 
-        .procedure-list strong { color: var(--primary); }
+.procedure-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 18px;
+}
+
+.procedure-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+
+  opacity: 0;
+  transform: translateY(10px);
+  animation: stepReveal 0.55s ease forwards;
+}
+
+@keyframes stepReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Icon bubble */
+.step-icon {
+  min-width: 38px;
+  height: 38px;
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background: linear-gradient(180deg, #fff1cc, #f5c86a);
+  color: #5a3f1f;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* Text */
+.step-content strong {
+  color: var(--primary);
+  font-size: 16px;
+  display: block;
+}
+
+.step-content p {
+  margin: 6px 0 0;
+  color: var(--subtext);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
 
         .pricing-row {
           display:flex;
@@ -364,14 +417,33 @@ export default function SingleTreatment() {
         <section className="section-card" style={{ marginTop: 28, background: "linear-gradient(180deg,var(--muted), #fff)" }}>
           <h2 className="section-title">Procedure — What to Expect</h2>
 
-          <ul className="procedure-list" style={{ marginTop: 14 }}>
-            {staticData.procedureSteps.map((step, i) => (
-              <li key={i} className="reveal-item" style={fadeDelay(i)}>
-                <strong>{step.title}</strong>
-                <div style={{ marginTop: 6, color: "var(--subtext)" }}>{step.desc}</div>
-              </li>
-            ))}
-          </ul>
+          <ul className="procedure-list">
+  {staticData.procedureSteps.map((step, i) => {
+   const icons = [
+  <Stethoscope size={18} />,
+  <Sparkles size={18} />,
+  <RefreshCcw size={18} />
+];
+
+    return (
+      <li
+        key={i}
+        className="procedure-step reveal-step"
+        style={{ animationDelay: `${i * 140}ms` }}
+      >
+        <div className="step-icon">
+          {icons[i] || <Tooth size={18} />}
+        </div>
+
+        <div className="step-content">
+          <strong>{step.title}</strong>
+          <p>{step.desc}</p>
+        </div>
+      </li>
+    );
+  })}
+</ul>
+
         </section>
       )}
 
